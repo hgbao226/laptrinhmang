@@ -14,6 +14,7 @@ namespace Lab_3
 {
     public partial class Bai_4_server : Form
     {
+
         private NetworkStream networkStream;
         private List<Socket> clientSockets;
 
@@ -29,7 +30,6 @@ namespace Lab_3
             CheckForIllegalCrossThreadCalls = false;
             Task.Run(() => StartListening());
         }
-
         void StartListening()
         {
             Socket listenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
