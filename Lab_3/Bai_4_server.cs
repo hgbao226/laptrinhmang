@@ -32,9 +32,7 @@ namespace Lab_3
 
         void StartListening()
         {
-            Socket listenerSocket = new Socket(AddressFamily.InterNetwork,
-                                                SocketType.Stream,
-                                                  ProtocolType.Tcp);
+            Socket listenerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint ipepServer = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8080);
             listView.Items.Add("Server running on 127.0.0.1:8080");
             listenerSocket.Bind(ipepServer);
