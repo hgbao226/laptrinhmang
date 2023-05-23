@@ -30,19 +30,22 @@
         {
             listView = new ListView();
             listen = new Button();
+            columnHeader1 = new ColumnHeader();
             SuspendLayout();
             // 
             // listView
             // 
             listView.AllowDrop = true;
-            listView.Enabled = false;
+            listView.Columns.AddRange(new ColumnHeader[] { columnHeader1 });
             listView.FullRowSelect = true;
+            listView.HeaderStyle = ColumnHeaderStyle.None;
             listView.Location = new Point(12, 64);
+            listView.MultiSelect = false;
             listView.Name = "listView";
             listView.Size = new Size(776, 374);
             listView.TabIndex = 0;
             listView.UseCompatibleStateImageBehavior = false;
-            listView.View = View.List;
+            listView.View = View.Details;
             // 
             // listen
             // 
@@ -53,6 +56,10 @@
             listen.Text = "Listen";
             listen.UseVisualStyleBackColor = true;
             listen.Click += listen_Click;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Width = 700;
             // 
             // Bai_4_server
             // 
@@ -71,5 +78,6 @@
 
         private ListView listView;
         private Button listen;
+        private ColumnHeader columnHeader1;
     }
 }

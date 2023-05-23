@@ -9,13 +9,13 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading.Tasks.Dataflow;
+using System.Xml.Linq;
 
 namespace Lab_3
 {
     public partial class Bai_4_server : Form
     {
-
-        private NetworkStream networkStream;
         private List<Socket> clientSockets;
 
         public Bai_4_server()
@@ -59,16 +59,22 @@ namespace Lab_3
             {
                 StringBuilder textBuilder = new StringBuilder();
                 string text = "";
-
                 do
                 {
                     bytesReceived = clientSocket.Receive(recvBuffer);
                     textBuilder.Append(Encoding.ASCII.GetString(recvBuffer, 0, bytesReceived));
                     text = textBuilder.ToString();
                 } while (!text.EndsWith("\n"));
-
-                listView.Items.Add(new ListViewItem(text));
-
+                string textToSend = text;
+                foreach (var socket in clientSockets)
+                {
+                    byte[] data = Encoding.ASCII.GetBytes(text);
+                    socket.Send(data);
+                }
+                ListViewItem newItem = new ListViewItem(text);
+                listView.Items.Add(newItem);
+                listView.TopItem = newItem;
+                
                 // Xử lý dữ liệu từ client
                 // ...
 
@@ -77,7 +83,6 @@ namespace Lab_3
                     break;
                 }
             }
-
             clientSocket.Close();
             clientSockets.Remove(clientSocket);
         }

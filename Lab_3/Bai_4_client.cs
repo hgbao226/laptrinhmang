@@ -18,10 +18,8 @@ namespace Lab_3
     public partial class Bai_4_client : Form
     {
         private TcpClient tcpClient;
-        private Byte[] data;
+        private Byte[]? data;
         private NetworkStream ns;
-
-
         public Bai_4_client()
         {
             InitializeComponent();
@@ -36,11 +34,11 @@ namespace Lab_3
                 tcpClient.Connect(ipEndPoint);
 
                 ns = tcpClient.GetStream(); // Gán giá trị cho biến ns
+                Task.Run(ReceiveDataFromServer);
             }
             
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
             }
         }
@@ -48,8 +46,10 @@ namespace Lab_3
         {
             if(ns != null)
             {
-                data = System.Text.Encoding.ASCII.GetBytes("quit\n");
-                ns.Write(data, 0, data.Length);
+                if(data != null) {
+                    data = System.Text.Encoding.ASCII.GetBytes("quit\n");
+                    ns.Write(data, 0, data.Length);
+                }
                 ns.Close();
                 tcpClient.Close();
             }
@@ -60,14 +60,37 @@ namespace Lab_3
             string name = nameTextBox.Text;
             string message = messTextBox.Text;
             string textToSend = $"{name}: {message}\n";
-            data = System.Text.Encoding.ASCII.GetBytes(textToSend);
-            ns.Write(data, 0, data.Length);
+            if(data != null)
+            {
+                data = System.Text.Encoding.ASCII.GetBytes(textToSend);
+                ns.Write(data, 0, data.Length);
+            }
         }
         private void Bai_4_client_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.Dispose();
             Bai_4 bai4 = Bai_4.GetInstance();
             bai4.Show();
+        }
+        private async Task ReceiveDataFromServer()
+        {
+            byte[] recvBuffer = new byte[1024];
+            while (true)
+            {
+                int bytesRead = await ns.ReadAsync(recvBuffer, 0, recvBuffer.Length);
+                if (bytesRead > 0)
+                {
+                    string receivedText = Encoding.ASCII.GetString(recvBuffer, 0, bytesRead);
+                    // Gọi phương thức Broadcast để hiển thị tin nhắn trên ListView
+                    Broadcast(receivedText);
+                }
+            }
+        }
+        private void Broadcast(string text)
+        {
+            listView.Invoke((MethodInvoker)delegate {
+                listView.Items.Add(text);
+            });
         }
     }
 }

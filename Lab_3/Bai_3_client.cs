@@ -22,7 +22,7 @@ namespace Lab_3
         // cổng port, địa chỉ IP sẽ gửi tin nhắn tới, nội dung tin nhắn
         int port = 8080;
         string ipAddress = "127.0.0.1";
-        string textToSend = "Tao có khiên\n";
+        string textToSend = "Hello\n";
 
         private void send_mess_Click(object sender, EventArgs e)
         {
