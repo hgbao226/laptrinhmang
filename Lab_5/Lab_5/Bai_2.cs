@@ -15,6 +15,7 @@ using MailKit.Net.Imap;
 using MailKit.Search;
 using MailKit;
 using MimeKit;
+using MailKit.Security;
 
 namespace Lab_5
 {
@@ -32,38 +33,38 @@ namespace Lab_5
 
         private void btnLogin_Click_1(object sender, EventArgs e)
         {
-            string email = txtEmail.Text;
+            string email = txtEmail.Text.Trim();
             string password = txtPassword.Text;
 
             using (var client = new ImapClient())
             {
-                client.Connect("imap.example.com", 993, true);
-                client.Authenticate(email, password);
-
-                var inbox = client.Inbox;
-                inbox.Open(FolderAccess.ReadOnly);
-
-                // Lấy số lượng email tổng cộng và số lượng email mới
-                int totalEmails = inbox.Count;
-                int newEmails = inbox.Search(SearchOptions.All, SearchQuery.NotSeen).Count;
-
-                lblTotal.Text = $"Total: {totalEmails}";
-                lblRecent.Text = $"Recent: {newEmails}";
-
-                listView1.Items.Clear();
-
-                for (int i = 0; i < inbox.Count; i++)
+                try
                 {
-                    var message = inbox.GetMessage(i);
+                    client.Connect("nhom5.nt106", 993, SecureSocketOptions.SslOnConnect);
+                    client.Authenticate(email, password);
+                    var inbox = client.Inbox;
+                    inbox.Open(FolderAccess.ReadOnly);
+                    listView1.Items.Clear();
+                    for (int i = 0; i < inbox.Count; i++)
+                    {
+                        var message = inbox.GetMessage(i);
+                        var name = new ListViewItem(message.Subject);
 
-                    var item = new ListViewItem(message.Subject);
-                    item.SubItems.Add(message.From.ToString());
-                    item.SubItems.Add(message.Date.Date.ToString());
+                        var from = new ListViewItem.ListViewSubItem(name, message.From.ToString());
+                        name.SubItems.Add(from);
 
-                    listView1.Items.Add(item);
+                        var date = new ListViewItem.ListViewSubItem(name, message.Date.Date.ToString());
+                        name.SubItems.Add(date);
+
+                        listView1.Items.Add(name);
+                    }
+                    client.Disconnect(true);
+                    MessageBox.Show("Emails retrieved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
-                client.Disconnect(true);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred while retrieving emails: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
