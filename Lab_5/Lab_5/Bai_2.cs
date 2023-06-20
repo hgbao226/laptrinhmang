@@ -29,7 +29,8 @@ namespace Lab_5
             // Dispose the form to free up resources
             this.Dispose();
         }
-        private void btnLogin_Click(object sender, EventArgs e)
+
+        private void btnLogin_Click_1(object sender, EventArgs e)
         {
             string email = txtEmail.Text;
             string password = txtPassword.Text;
