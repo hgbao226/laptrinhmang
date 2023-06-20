@@ -42,5 +42,10 @@ namespace Lab_5
                 }
             }
         }
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // Dispose the form to free up resources
+            this.Dispose();
+        }
     }
 }
