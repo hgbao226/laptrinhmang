@@ -34,9 +34,6 @@
             txtPassword = new TextBox();
             btnLogin = new Button();
             listView1 = new ListView();
-            Email = new ColumnHeader();
-            From = new ColumnHeader();
-            ThoiGian = new ColumnHeader();
             lblTotal = new Label();
             lblRecent = new Label();
             SuspendLayout();
@@ -88,27 +85,12 @@
             // 
             // listView1
             // 
-            listView1.Columns.AddRange(new ColumnHeader[] { Email, From, ThoiGian });
             listView1.Location = new Point(54, 120);
             listView1.Margin = new Padding(3, 2, 3, 2);
             listView1.Name = "listView1";
             listView1.Size = new Size(602, 193);
             listView1.TabIndex = 5;
             listView1.UseCompatibleStateImageBehavior = false;
-            // 
-            // Email
-            // 
-            Email.Text = "Email";
-            Email.Width = 200;
-            // 
-            // From
-            // 
-            From.Width = 100;
-            // 
-            // ThoiGian
-            // 
-            ThoiGian.Text = "Thời gian";
-            ThoiGian.Width = 100;
             // 
             // lblTotal
             // 
@@ -154,9 +136,6 @@
         private TextBox txtPassword;
         private Button btnLogin;
         private ListView listView1;
-        private ColumnHeader Email;
-        private ColumnHeader From;
-        private ColumnHeader ThoiGian;
         private Label lblTotal;
         private Label lblRecent;
     }
